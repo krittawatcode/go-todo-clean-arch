@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	_ "github.com/go-sql-driver/mysql" // use to connect db
 	"github.com/jinzhu/gorm"
 	"github.com/krittawatcode/go-todo-clean-arch/domain"
@@ -26,8 +24,6 @@ func (t *todoRepository) GetAllToDos(todo *[]models.Todo) (err error) {
 }
 
 func (t *todoRepository) CreateATodo(todo *models.Todo) (err error) {
-	fmt.Println("CreateATodo")
-	fmt.Println(todo.Description)
 	if err = t.conn.Create(todo).Error; err != nil {
 		return err
 	}
