@@ -1,6 +1,9 @@
 package usecase
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/krittawatcode/go-todo-clean-arch/domain"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
@@ -17,39 +20,49 @@ func NewToDoUseCase(repo domain.ToDoRepository) domain.ToDoUseCase {
 	}
 }
 
-func (t *todoUseCase) GetAllToDos(c *gin.Context) (todos []models.ToDo, err error) {
-	var todo []models.ToDo
+func (t *todoUseCase) GetAllToDos(c *gin.Context) (todos []models.Todo, err error) {
+	var todo []models.Todo
 	handleErr := t.todoRepo.GetAllToDos(&todo)
-	return todos, handleErr
+	fmt.Println(handleErr)
+	fmt.Println(todo)
+	return todo, handleErr
 }
 
-func (t *todoUseCase) CreateATodo(c *gin.Context) (todo models.ToDo, err error) {
-	var newToDo models.ToDo
+func (t *todoUseCase) CreateATodo(c *gin.Context) (todo models.Todo, err error) {
+	fmt.Println("Usecase : CreateATodo")
+	var newToDo models.Todo
+	if err := c.ShouldBind(&newToDo); err != nil {
+		log.Fatal("cannot bind")
+	}
 	handleErr := t.todoRepo.CreateATodo(&newToDo)
 	return newToDo, handleErr
 }
 
-func (t *todoUseCase) GetATodo(c *gin.Context) (todo models.ToDo, err error) {
+func (t *todoUseCase) GetATodo(c *gin.Context) (todo models.Todo, err error) {
 	id := c.Params.ByName("id")
-	var respToDo models.ToDo
+	var respToDo models.Todo
 	handleErr := t.todoRepo.GetATodo(&respToDo, id)
 	return respToDo, handleErr
 }
 
-func (t *todoUseCase) UpdateATodo(c *gin.Context) (todo models.ToDo, err error) {
+func (t *todoUseCase) UpdateATodo(c *gin.Context) (todo models.Todo, err error) {
 	id := c.Params.ByName("id")
-	var respToDo models.ToDo
-	errResp := t.todoRepo.GetATodo(&respToDo, id)
-	if errResp != nil {
-		return respToDo, errResp
+	var reqToDo models.Todo
+	if err := c.ShouldBind(&reqToDo); err != nil {
+		log.Fatal("cannot bind")
 	}
-	handleErr := t.todoRepo.UpdateATodo(&respToDo, id)
-	return respToDo, handleErr
+	var requestToDo models.Todo
+	errResp := t.todoRepo.GetATodo(&requestToDo, id)
+	if errResp != nil {
+		return requestToDo, errResp
+	}
+	handleErr := t.todoRepo.UpdateATodo(&reqToDo, id)
+	return reqToDo, handleErr
 }
 
 func (t *todoUseCase) DeleteATodo(c *gin.Context) (deletedID string, err error) {
 	id := c.Params.ByName("id")
-	var respToDo models.ToDo
+	var respToDo models.Todo
 	handleErr := t.todoRepo.DeleteATodo(&respToDo, id)
 	return id, handleErr
 }

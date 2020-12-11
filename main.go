@@ -13,13 +13,13 @@ import (
 var err error
 
 func main() {
-	database.DB, err = gorm.Open("mysql", "root:p@ssw0rd@tcp(127.0.0.1:3306)/todo?charset=utf8&parseTime=True")
+	database.DB, err = gorm.Open("mysql", database.DbURL(database.BuildDBConfig()))
 	if err != nil {
 		fmt.Println("statuse: ", err)
 	}
 	defer database.DB.Close()
 	// run the migrations: todo struct
-	database.DB.AutoMigrate(&models.ToDo{})
+	database.DB.AutoMigrate(&models.Todo{})
 	//setup routes
 	r := routes.SetupRouter()
 	// running

@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/krittawatcode/go-todo-clean-arch/database"
 	"github.com/krittawatcode/go-todo-clean-arch/delivery"
@@ -11,6 +13,7 @@ import (
 // SetupRouter ...
 func SetupRouter() *gin.Engine {
 
+	fmt.Println("SetupRouter")
 	todoRepo := repository.NewToDoRepository(database.DB)
 	todoUseCase := usecase.NewToDoUseCase(todoRepo)
 	todoHandler := delivery.NewToDoHandler(todoUseCase)
