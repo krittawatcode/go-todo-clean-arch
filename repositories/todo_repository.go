@@ -1,4 +1,4 @@
-package repository
+package repositories
 
 import (
 	_ "github.com/go-sql-driver/mysql" // use to connect db

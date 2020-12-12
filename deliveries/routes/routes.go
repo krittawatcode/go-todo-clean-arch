@@ -2,18 +2,18 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/krittawatcode/go-todo-clean-arch/database"
-	"github.com/krittawatcode/go-todo-clean-arch/delivery"
-	"github.com/krittawatcode/go-todo-clean-arch/repository"
-	"github.com/krittawatcode/go-todo-clean-arch/usecase"
+	"github.com/krittawatcode/go-todo-clean-arch/databases"
+	"github.com/krittawatcode/go-todo-clean-arch/deliveries"
+	"github.com/krittawatcode/go-todo-clean-arch/repositories"
+	"github.com/krittawatcode/go-todo-clean-arch/usecases"
 )
 
 // SetupRouter ...
 func SetupRouter() *gin.Engine {
 
-	todoRepo := repository.NewToDoRepository(database.DB)
-	todoUseCase := usecase.NewToDoUseCase(todoRepo)
-	todoHandler := delivery.NewToDoHandler(todoUseCase)
+	todoRepo := repositories.NewToDoRepository(databases.DB)
+	todoUseCase := usecases.NewToDoUseCase(todoRepo)
+	todoHandler := deliveries.NewToDoHandler(todoUseCase)
 
 	r := gin.Default()
 	v1 := r.Group("/v1")

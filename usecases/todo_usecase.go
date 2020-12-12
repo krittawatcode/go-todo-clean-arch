@@ -1,4 +1,4 @@
-package usecase
+package usecases
 
 import (
 	"github.com/krittawatcode/go-todo-clean-arch/domains"
