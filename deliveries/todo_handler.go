@@ -4,17 +4,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/krittawatcode/go-todo-clean-arch/domain"
+	"github.com/krittawatcode/go-todo-clean-arch/domains"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
 )
 
 // ToDoHandler use for handle framwork here and present as a controller
 type ToDoHandler struct {
-	todoUseCase domain.ToDoUseCase
+	todoUseCase domains.ToDoUseCase
 }
 
 // NewToDoHandler ...
-func NewToDoHandler(usecase domain.ToDoUseCase) *ToDoHandler {
+func NewToDoHandler(usecase domains.ToDoUseCase) *ToDoHandler {
 	return &ToDoHandler{
 		todoUseCase: usecase,
 	}

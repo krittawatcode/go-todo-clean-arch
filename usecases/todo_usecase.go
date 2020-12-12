@@ -1,17 +1,17 @@
 package usecase
 
 import (
-	"github.com/krittawatcode/go-todo-clean-arch/domain"
+	"github.com/krittawatcode/go-todo-clean-arch/domains"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
 )
 
 // UseCase don't give a shit about the world!!
 type todoUseCase struct {
-	todoRepo domain.ToDoRepository
+	todoRepo domains.ToDoRepository
 }
 
 // NewToDoUseCase ...
-func NewToDoUseCase(repo domain.ToDoRepository) domain.ToDoUseCase {
+func NewToDoUseCase(repo domains.ToDoRepository) domains.ToDoUseCase {
 	return &todoUseCase{
 		todoRepo: repo,
 	}

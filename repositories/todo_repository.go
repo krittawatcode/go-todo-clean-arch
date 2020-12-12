@@ -3,7 +3,7 @@ package repository
 import (
 	_ "github.com/go-sql-driver/mysql" // use to connect db
 	"github.com/jinzhu/gorm"
-	"github.com/krittawatcode/go-todo-clean-arch/domain"
+	"github.com/krittawatcode/go-todo-clean-arch/domains"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
 )
 
@@ -12,7 +12,7 @@ type todoRepository struct {
 }
 
 // NewToDoRepository ...
-func NewToDoRepository(conn *gorm.DB) domain.ToDoRepository {
+func NewToDoRepository(conn *gorm.DB) domains.ToDoRepository {
 	return &todoRepository{conn}
 }
 

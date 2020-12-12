@@ -1,4 +1,4 @@
-package domain
+package domains
 
 import (
 	"github.com/krittawatcode/go-todo-clean-arch/models"
