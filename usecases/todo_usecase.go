@@ -5,6 +5,7 @@ import (
 	"github.com/krittawatcode/go-todo-clean-arch/models"
 )
 
+// UseCase don't give a shit about the world!!
 type todoUseCase struct {
 	todoRepo domain.ToDoRepository
 }
@@ -39,6 +40,7 @@ func (t *todoUseCase) UpdateATodo(input *models.Todo, id string) (err error) {
 	if errResp != nil {
 		return errResp
 	}
+	// update
 	handleErr := t.todoRepo.UpdateATodo(input, id)
 	return handleErr
 }
