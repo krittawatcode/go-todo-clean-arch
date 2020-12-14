@@ -6,7 +6,7 @@ import (
 
 // ToDoUseCase ...
 type ToDoUseCase interface {
-	GetAllToDos() (t []models.Todo, err error)
+	GetAllTodo() (t []models.Todo, err error)
 	CreateATodo(t *models.Todo) (err error)
 	GetATodo(t *models.Todo, id string) (err error)
 	UpdateATodo(t *models.Todo, id string) (err error)
@@ -15,7 +15,7 @@ type ToDoUseCase interface {
 
 // ToDoRepository ...
 type ToDoRepository interface {
-	GetAllToDos(t *[]models.Todo) (err error)
+	GetAllTodo(t *[]models.Todo) (err error)
 	CreateATodo(t *models.Todo) (err error)
 	GetATodo(t *models.Todo, id string) (err error)
 	UpdateATodo(t *models.Todo, id string) (err error)

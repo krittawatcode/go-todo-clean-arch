@@ -16,7 +16,7 @@ func NewToDoRepository(conn *gorm.DB) domains.ToDoRepository {
 	return &todoRepository{conn}
 }
 
-func (t *todoRepository) GetAllToDos(todo *[]models.Todo) (err error) {
+func (t *todoRepository) GetAllTodo(todo *[]models.Todo) (err error) {
 	if err = t.conn.Find(todo).Error; err != nil {
 		return err
 	}

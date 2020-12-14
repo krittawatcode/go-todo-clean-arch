@@ -17,9 +17,9 @@ func NewToDoUseCase(repo domains.ToDoRepository) domains.ToDoUseCase {
 	}
 }
 
-func (t *todoUseCase) GetAllToDos() (todos []models.Todo, err error) {
+func (t *todoUseCase) GetAllTodo() (todos []models.Todo, err error) {
 	var todo []models.Todo
-	handleErr := t.todoRepo.GetAllToDos(&todo)
+	handleErr := t.todoRepo.GetAllTodo(&todo)
 	return todo, handleErr
 }
 
