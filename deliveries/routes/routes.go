@@ -18,7 +18,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	v1 := r.Group("/v1")
 	{
-		v1.GET("todo", todoHandler.GetAllToDos)
+		v1.GET("todo", todoHandler.GetAllTodo)
 		v1.POST("todo", todoHandler.CreateATodo)
 		v1.GET("todo/:id", todoHandler.GetATodo)
 		v1.PUT("todo/:id", todoHandler.UpdateATodo)

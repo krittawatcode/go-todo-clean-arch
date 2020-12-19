@@ -20,8 +20,8 @@ func NewToDoHandler(usecase domains.ToDoUseCase) *ToDoHandler {
 	}
 }
 
-// GetAllToDos ...
-func (t *ToDoHandler) GetAllToDos(c *gin.Context) {
+// GetAllTodo ...
+func (t *ToDoHandler) GetAllTodo(c *gin.Context) {
 	resp, err := t.todoUseCase.GetAllTodo()
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
