@@ -15,7 +15,7 @@ import (
 
 type Suite struct {
 	suite.Suite
-	DB   *gorm.DB
+	db   *gorm.DB
 	mock sqlmock.Sqlmock
 
 	repository domains.ToDoRepository
@@ -31,12 +31,22 @@ func (s *Suite) SetupSuite() {
 	db, s.mock, err = sqlmock.New()
 	require.NoError(s.T(), err)
 
-	s.DB, err = gorm.Open("mysql", db)
+	s.db, err = gorm.Open("mysql", db)
 	require.NoError(s.T(), err)
 
-	s.DB.LogMode(true)
+	s.db.LogMode(true)
 
-	s.repository = NewToDoRepository(s.DB)
+	if err != nil {
+		s.T().Error(err)
+	}
+	// Explicitly clean up GORM after the test
+	s.T().Cleanup(func() {
+		s.db.Close()
+	})
+	// if err := s.db.AutoMigrate(&models.Todo{}); err != nil {
+	// 	s.T().Error(err)
+	// }
+	s.repository = NewToDoRepository(s.db)
 }
 
 func (s *Suite) AfterTest(_, _ string) {
@@ -48,12 +58,32 @@ func TestInit(t *testing.T) {
 }
 
 func (s *Suite) TestGetAllTodo() {
-	// mockup sql
-	rows := sqlmock.NewRows([]string{"id", "title", "description"}).AddRow(1, "Make some program", "Create TODO app for testing").AddRow(2, "Make some program", "Create TODO app for testing")
-	// expected
+
+	rows := sqlmock.NewRows([]string{"id", "title", "description"}).
+		AddRow(1, "Make some program", "Create TODO app for testing").
+		AddRow(2, "Make some program", "Create TODO app for testing")
+
 	s.mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `todo`")).WillReturnRows(rows)
 	result := []models.Todo{}
-	// perform
+
 	err := s.repository.GetAllTodo(&result)
+	require.NoError(s.T(), err)
+}
+
+func (s *Suite) TestCreateATodo() {
+	var (
+		title = "testing"
+		desc  = "testing description"
+	)
+
+	expectResult := sqlmock.NewRows([]string{"id", "title", "description"}).AddRow(1, "testing", "testing description")
+
+	s.mock.ExpectQuery(regexp.QuoteMeta(
+		`INSERT INTO "todo" ("title", "description") VALUES ($1, $2)`)).
+		WithArgs(title, desc).
+		WillReturnRows(expectResult)
+
+	var result models.Todo
+	err := s.repository.CreateATodo(&result)
 	require.NoError(s.T(), err)
 }

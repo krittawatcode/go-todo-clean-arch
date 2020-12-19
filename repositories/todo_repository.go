@@ -24,7 +24,7 @@ func (t *todoRepository) GetAllTodo(todo *[]models.Todo) (err error) {
 }
 
 func (t *todoRepository) CreateATodo(todo *models.Todo) (err error) {
-	if err = t.conn.Create(todo).Error; err != nil {
+	if err = t.conn.Select("Title", "Description").Create(todo).Error; err != nil {
 		return err
 	}
 	return nil
