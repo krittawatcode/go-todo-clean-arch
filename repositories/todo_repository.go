@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	_ "github.com/go-sql-driver/mysql" // use to connect db
 	"github.com/jinzhu/gorm"
 	"github.com/krittawatcode/go-todo-clean-arch/domains"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
@@ -24,26 +23,27 @@ func (t *todoRepository) GetAllTodo(todo *[]models.Todo) (err error) {
 }
 
 func (t *todoRepository) CreateATodo(todo *models.Todo) (err error) {
-	if err = t.conn.Select("Title", "Description").Create(todo).Error; err != nil {
+	if err = t.conn.Create(todo).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *todoRepository) GetATodo(todo *models.Todo, id string) (err error) {
-	if err := t.conn.Where("id = ?", id).First(todo).Error; err != nil {
+func (t *todoRepository) GetATodo(todo *models.Todo, id int) (err error) {
+
+	if err := t.conn.Where("id = ?", id).Find(todo).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *todoRepository) UpdateATodo(todo *models.Todo, id string) (err error) {
+func (t *todoRepository) UpdateATodo(todo *models.Todo, id int) (err error) {
 	// fmt.Println(todo)
 	t.conn.Save(todo) // save all field
 	return nil
 }
 
-func (t *todoRepository) DeleteATodo(todo *models.Todo, id string) (err error) {
+func (t *todoRepository) DeleteATodo(todo *models.Todo, id int) (err error) {
 	t.conn.Where("id = ?", id).Delete(todo)
 	return nil
 }

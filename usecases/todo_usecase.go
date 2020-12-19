@@ -28,12 +28,12 @@ func (t *todoUseCase) CreateATodo(input *models.Todo) (err error) {
 	return handleErr
 }
 
-func (t *todoUseCase) GetATodo(input *models.Todo, id string) (err error) {
+func (t *todoUseCase) GetATodo(input *models.Todo, id int) (err error) {
 	handleErr := t.todoRepo.GetATodo(input, id)
 	return handleErr
 }
 
-func (t *todoUseCase) UpdateATodo(input *models.Todo, id string) (err error) {
+func (t *todoUseCase) UpdateATodo(input *models.Todo, id int) (err error) {
 	// check avaliable
 	var checkingTodo models.Todo
 	errResp := t.todoRepo.GetATodo(&checkingTodo, id)
@@ -45,7 +45,7 @@ func (t *todoUseCase) UpdateATodo(input *models.Todo, id string) (err error) {
 	return handleErr
 }
 
-func (t *todoUseCase) DeleteATodo(input *models.Todo, id string) (err error) {
+func (t *todoUseCase) DeleteATodo(input *models.Todo, id int) (err error) {
 	handleErr := t.todoRepo.DeleteATodo(input, id)
 	return handleErr
 }

@@ -2,6 +2,7 @@ package deliveries
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/krittawatcode/go-todo-clean-arch/domains"
@@ -48,7 +49,11 @@ func (t *ToDoHandler) CreateATodo(c *gin.Context) {
 func (t *ToDoHandler) GetATodo(c *gin.Context) {
 	var newToDo models.Todo
 	id := c.Params.ByName("id")
-	err := t.todoUseCase.GetATodo(&newToDo, id)
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+	}
+	err = t.todoUseCase.GetATodo(&newToDo, intID)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -59,11 +64,16 @@ func (t *ToDoHandler) GetATodo(c *gin.Context) {
 // UpdateATodo ...
 func (t *ToDoHandler) UpdateATodo(c *gin.Context) {
 	id := c.Params.ByName("id")
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+	}
+
 	var reqToDo models.Todo
 	if err := c.ShouldBind(&reqToDo); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
-	err := t.todoUseCase.UpdateATodo(&reqToDo, id)
+	err = t.todoUseCase.UpdateATodo(&reqToDo, intID)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -74,8 +84,12 @@ func (t *ToDoHandler) UpdateATodo(c *gin.Context) {
 // DeleteATodo ...
 func (t *ToDoHandler) DeleteATodo(c *gin.Context) {
 	id := c.Params.ByName("id")
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+	}
 	var respToDo models.Todo
-	err := t.todoUseCase.DeleteATodo(&respToDo, id)
+	err = t.todoUseCase.DeleteATodo(&respToDo, intID)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {

@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/go-test/deep"
 	"github.com/jinzhu/gorm"
 	"github.com/krittawatcode/go-todo-clean-arch/domains"
 	"github.com/krittawatcode/go-todo-clean-arch/models"
@@ -60,8 +61,7 @@ func TestInit(t *testing.T) {
 func (s *Suite) TestGetAllTodo() {
 
 	rows := sqlmock.NewRows([]string{"id", "title", "description"}).
-		AddRow(1, "Make some program", "Create TODO app for testing").
-		AddRow(2, "Make some program", "Create TODO app for testing")
+		AddRow(1, "Make some program", "Create TODO app for testing")
 
 	s.mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `todo`")).WillReturnRows(rows)
 	result := []models.Todo{}
@@ -72,18 +72,41 @@ func (s *Suite) TestGetAllTodo() {
 
 func (s *Suite) TestCreateATodo() {
 	var (
+		id    = 1
 		title = "testing"
 		desc  = "testing description"
 	)
 
-	expectResult := sqlmock.NewRows([]string{"id", "title", "description"}).AddRow(1, "testing", "testing description")
-
 	s.mock.ExpectQuery(regexp.QuoteMeta(
-		`INSERT INTO "todo" ("title", "description") VALUES ($1, $2)`)).
-		WithArgs(title, desc).
-		WillReturnRows(expectResult)
+		`INSERT INTO "todo" ("id","title","description") 
+			VALUES ($1,$2,$3) RETURNING "todo"."id"`)).
+		WithArgs(id, title, desc).
+		WillReturnRows(
+			sqlmock.NewRows([]string{"id"}).AddRow(id))
 
 	var result models.Todo
 	err := s.repository.CreateATodo(&result)
+
 	require.NoError(s.T(), err)
+}
+
+func (s *Suite) TestGetATodo() {
+
+	var (
+		id          = 1
+		title       = "Make some program"
+		description = "Create TODO app for testing"
+	)
+
+	s.mock.ExpectQuery(regexp.QuoteMeta(
+		`SELECT * FROM "todo" WHERE (id = $1)`)).
+		WithArgs(id).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "title", "description"}).
+			AddRow(id, title, description))
+
+	result := models.Todo{}
+
+	err := s.repository.GetATodo(&result, id)
+	require.NoError(s.T(), err)
+	require.Nil(s.T(), deep.Equal(&models.Todo{ID: id, Title: title, Description: description}, &result))
 }
